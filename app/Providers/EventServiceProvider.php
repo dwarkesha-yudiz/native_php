@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\OpenAddReminderEvent;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Native\Laravel\Facades\Window;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -25,7 +27,15 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(OpenAddReminderEvent::class, function () {
+            Window::open('add_reminder')
+                ->route('add-reminder')
+                ->title('Add Reminder')
+                ->rememberState()
+                ->showDevTools(false)
+                ->height(800)
+                ->width(800);
+        });
     }
 
     /**
